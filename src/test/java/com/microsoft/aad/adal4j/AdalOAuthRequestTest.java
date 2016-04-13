@@ -125,7 +125,7 @@ public class AdalOAuthRequestTest extends AbstractAdalTests {
         Assert.assertEquals(response.getWWWAuthenticate(), "www-a");
         Assert.assertEquals(response.getLocation().getAuthority(),
                 "location.pl");
-        Assert.assertEquals(response.getLocation().getProtocol(), "https");
+        Assert.assertEquals(response.getLocation().getScheme(), "https");
         Assert.assertNull(response.getContent());
     }
     

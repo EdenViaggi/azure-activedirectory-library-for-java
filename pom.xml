@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.microsoft.azure</groupId>
 	<artifactId>adal4j</artifactId>
-	<version>1.1.2</version>
+	<version>1.1.2.eden.001</version>
 	<packaging>jar</packaging>
 	<name>adal4j</name>
 	<description>
@@ -70,7 +70,7 @@
 		<dependency>
 			<groupId>com.nimbusds</groupId>
 			<artifactId>oauth2-oidc-sdk</artifactId>
-			<version>4.5</version>
+			<version>5.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -126,6 +126,20 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
+
+	<!-- distribution -->
+	<distributionManagement>
+		<repository>
+			<id>eden-nexus</id>
+			<name>Eden Viaggi Releases</name>
+			<url>http://luana.edenviaggi.intra/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>eden-nexus-snapshot</id>
+			<name>Eden Viaggi Snapshots</name>
+			<url>http://luana.edenviaggi.intra/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<build>
 		<plugins>

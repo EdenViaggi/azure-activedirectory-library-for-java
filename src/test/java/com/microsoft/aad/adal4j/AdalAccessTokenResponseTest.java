@@ -52,7 +52,7 @@ public class AdalAccessTokenResponseTest extends AbstractAdalTests {
                         "refresh_token"), idToken);
         Assert.assertNotNull(response);
         final JWT jwt = response.getIDToken();
-        Assert.assertTrue(jwt.getJWTClaimsSet().getAllClaims().size() >= 0);
+        Assert.assertTrue(jwt.getJWTClaimsSet().getClaims().size() >= 0);
     }
 
     @Test

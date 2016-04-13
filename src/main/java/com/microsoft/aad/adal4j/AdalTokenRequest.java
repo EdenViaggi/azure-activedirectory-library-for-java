@@ -60,16 +60,16 @@ class AdalTokenRequest {
         this.sslSocketFactory = sslSocketFactory;
     }
 
-    /**
-     * 
-     * @param request
-     * @return
-     * @throws ParseException
-     * @throws AuthenticationException
-     * @throws SerializeException
-     * @throws IOException
-     * @throws java.text.ParseException
-     */
+//    /**
+//     *
+//     * @param request
+//     * @return
+//     * @throws ParseException
+//     * @throws AuthenticationException
+//     * @throws SerializeException
+//     * @throws IOException
+//     * @throws java.text.ParseException
+//     */
     AuthenticationResult executeOAuthRequestAndProcessResponse()
             throws ParseException, AuthenticationException, SerializeException,
             IOException, java.text.ParseException {
@@ -84,20 +84,19 @@ class AdalTokenRequest {
                     .parseHttpResponse(httpResponse);
 
             String refreshToken = null;
-            if (response.getRefreshToken() != null) {
-                refreshToken = response.getRefreshToken().getValue();
+            if (response.getTokens().getRefreshToken() != null) {
+                refreshToken = response.getTokens().getRefreshToken().getValue();
             }
 
             UserInfo info = null;
             if (response.getIDToken() != null) {
-                info = UserInfo.createFromIdTokenClaims(response.getIDToken()
-                        .getJWTClaimsSet());
+                info = UserInfo.createFromIdTokenClaims(response.getIDToken().getJWTClaimsSet());
             }
 
-            result = new AuthenticationResult(response.getAccessToken()
+            result = new AuthenticationResult(response.getTokens().getAccessToken()
                     .getType().getValue(),
-                    response.getAccessToken().getValue(), refreshToken,
-                    response.getAccessToken().getLifetime(),
+                    response.getTokens().getAccessToken().getValue(), refreshToken,
+                    response.getTokens().getAccessToken().getLifetime(),
                     response.getIDTokenString(), info,
                     !StringHelper.isBlank(response.getResource()));
         }

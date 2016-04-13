@@ -20,6 +20,7 @@
 package com.microsoft.aad.adal4j;
 
 import java.security.interfaces.RSAPrivateKey;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,7 @@ import com.nimbusds.jose.util.Base64;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import net.minidev.json.JSONObject;
 
 /**
  *
@@ -45,24 +47,30 @@ final class JwtHelper {
      * @throws AuthenticationException
      */
     static ClientAssertion buildJwt(final AsymmetricKeyCredential credential,
-            final String jwtAudience) throws AuthenticationException {
+            final String jwtAudience) throws AuthenticationException, ParseException {
         if (credential == null) {
             throw new IllegalArgumentException("credential is null");
         }
 
-        final JWTClaimsSet claimsSet = new AdalJWTClaimsSet();
-        final List<String> audience = new ArrayList<String>();
-        audience.add(jwtAudience);
-        claimsSet.setAudience(audience);
-        claimsSet.setIssuer(credential.getClientId());
-        final long time = System.currentTimeMillis();
-        claimsSet.setNotBeforeTime(new Date(time));
-        claimsSet
-                .setExpirationTime(new Date(
-                        time
-                                + AuthenticationConstants.AAD_JWT_TOKEN_LIFETIME_SECONDS
-                                * 1000));
-        claimsSet.setSubject(credential.getClientId());
+
+//        final List<String> audience = new ArrayList<String>();
+//        audience.add(jwtAudience);
+        JSONObject json = new JSONObject();
+        json.put("aud", jwtAudience);
+        json.put("iss", credential.getClientId());
+        json.put("nbf", System.currentTimeMillis() + AuthenticationConstants.AAD_JWT_TOKEN_LIFETIME_SECONDS * 1000);
+        json.put("sub", credential.getClientId());
+        final JWTClaimsSet claimsSet = JWTClaimsSet.parse(json);
+//        claimsSet.setAudience(audience);
+//        claimsSet.setIssuer(credential.getClientId());
+//        final long time = System.currentTimeMillis();
+//        claimsSet.setNotBeforeTime(new Date(time));
+//        claimsSet
+//                .setExpirationTime(new Date(
+//                        time
+//                                + AuthenticationConstants.AAD_JWT_TOKEN_LIFETIME_SECONDS
+//                                * 1000));
+//        claimsSet.setSubject(credential.getClientId());
         SignedJWT jwt = null;
         try {
             JWSHeader.Builder builder = new Builder(JWSAlgorithm.RS256);

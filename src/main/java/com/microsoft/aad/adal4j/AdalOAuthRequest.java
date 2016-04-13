@@ -25,9 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.Proxy;
-import java.net.URL;
+import java.net.*;
 import java.util.Collections;
 import java.util.Map;
 
@@ -53,12 +51,12 @@ class AdalOAuthRequest extends HTTPRequest {
     private final Proxy proxy;
     private final SSLSocketFactory sslSocketFactory;
 
-    /**
-     * 
-     * @param method
-     * @param url
-     * @param correlationId
-     */
+//    /**
+//     *
+//     * @param method
+//     * @param url
+//     * @param correlationId
+//     */
     AdalOAuthRequest(final Method method, final URL url,
             final Map<String, String> extraHeaderParams, final Proxy proxy,
             final SSLSocketFactory sslSocketFactory) {
@@ -76,7 +74,7 @@ class AdalOAuthRequest extends HTTPRequest {
      * 
      */
     @Override
-    public HTTPResponse send() throws IOException {
+    public HTTPResponse send() throws IOException  {
 
         final HttpsURLConnection conn = HttpHelper.openConnection(this.getURL(),
                 this.proxy, this.sslSocketFactory);
@@ -85,15 +83,19 @@ class AdalOAuthRequest extends HTTPRequest {
         HttpHelper.verifyReturnedCorrelationId(log, conn,
                 this.extraHeaderParams
                         .get(ClientDataHttpHeaders.CORRELATION_ID_HEADER_NAME));
-        return createResponse(conn, out);
+        try {
+            return createResponse(conn, out);
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("Invalid create response " + e.getMessage());
+        }
     }
 
     HTTPResponse createResponse(final HttpURLConnection conn, final String out)
-            throws IOException {
+            throws IOException, URISyntaxException {
         final HTTPResponse response = new HTTPResponse(conn.getResponseCode());
         final String location = conn.getHeaderField("Location");
         if (!StringHelper.isBlank(location)) {
-            response.setLocation(new URL(location));
+            response.setLocation(new URI(location));
         }
 
         try {

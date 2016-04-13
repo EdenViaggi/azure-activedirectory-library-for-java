@@ -24,10 +24,14 @@ import net.minidev.json.JSONObject;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 
+import java.util.Map;
+
 /**
  *
  */
-class AdalJWTClaimsSet extends JWTClaimsSet {
+class AdalJWTClaimsSet {
+    /*extends
+} JWTClaimsSet {
 
     static final String AUDIENCE_CLAIM = "aud";
 
@@ -49,5 +53,5 @@ class AdalJWTClaimsSet extends JWTClaimsSet {
             }
         }
         return jo;
-    }
+    }*/
 }

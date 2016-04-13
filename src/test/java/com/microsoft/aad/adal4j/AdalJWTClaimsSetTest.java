@@ -19,9 +19,11 @@
  ******************************************************************************/
 package com.microsoft.aad.adal4j;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nimbusds.jwt.JWTClaimsSet;
 import net.minidev.json.JSONObject;
 
 import org.testng.Assert;
@@ -32,36 +34,39 @@ import org.testng.annotations.Test;
  */
 public class AdalJWTClaimsSetTest extends AbstractAdalTests {
 
-    @Test
-    public void testNullAudience() {
+    static final String AUDIENCE_CLAIM = "aud";
 
-        final AdalJWTClaimsSet obj = new AdalJWTClaimsSet();
-        obj.setAudience((String)null);
+    @Test
+    public void testNullAudience() throws ParseException {
+
+        JSONObject json = new JSONObject();
+        json.put("aud", null);
+        final JWTClaimsSet obj = JWTClaimsSet.parse(json);
         final JSONObject jo = obj.toJSONObject();
-        Assert.assertFalse(jo.containsKey(AdalJWTClaimsSet.AUDIENCE_CLAIM));
+        Assert.assertFalse(jo.containsKey(AUDIENCE_CLAIM));
     }
 
     @Test
-    public void testEmptyAudience() {
+    public void testEmptyAudience() throws ParseException {
 
-        final AdalJWTClaimsSet obj = new AdalJWTClaimsSet();
-        obj.setAudience(new ArrayList<String>());
-        obj.setIssuer("issuer");
-        JSONObject jo = obj.toJSONObject();
-        jo = obj.toJSONObject();
-        Assert.assertFalse(jo.containsKey(AdalJWTClaimsSet.AUDIENCE_CLAIM));
+        JSONObject json = new JSONObject();
+        json.put("aud", "");
+        json.put("iss", "issuer");
+        final JWTClaimsSet obj = JWTClaimsSet.parse(json);
+        final JSONObject jo = obj.toJSONObject();
+        Assert.assertTrue(jo.containsKey(AUDIENCE_CLAIM));
     }
 
     @Test
-    public void testPopulatedAudience() {
+    public void testPopulatedAudience() throws ParseException {
 
-        final AdalJWTClaimsSet obj = new AdalJWTClaimsSet();
-        List<String> aud = new ArrayList<String>();
-        aud.add("aud1");
-        obj.setAudience(aud);
-        obj.setIssuer("issuer");
+//        List<String> audience = new ArrayList<>();
+//        audience.add("aud1");
+        JSONObject json = new JSONObject();
+        json.put("aud", "aud1");
+        json.put("iss", "issuer");
+        final JWTClaimsSet obj = JWTClaimsSet.parse(json);
         JSONObject jo = obj.toJSONObject();
-        jo = obj.toJSONObject();
-        Assert.assertTrue(jo.containsKey(AdalJWTClaimsSet.AUDIENCE_CLAIM));
+        Assert.assertTrue(jo.containsKey(AUDIENCE_CLAIM));
     }
 }

@@ -378,7 +378,7 @@ public class AuthenticationContext {
     public Future<AuthenticationResult> acquireToken(final String resource,
             final AsymmetricKeyCredential credential,
             final AuthenticationCallback callback)
-            throws AuthenticationException {
+            throws AuthenticationException, java.text.ParseException {
         return this.acquireToken(resource, JwtHelper.buildJwt(credential,
                 this.authenticationAuthority.getSelfSignedJwtAudience()),
                 callback);
@@ -568,7 +568,7 @@ public class AuthenticationContext {
             final String authorizationCode, final URI redirectUri,
             final AsymmetricKeyCredential credential,
             final AuthenticationCallback callback)
-            throws AuthenticationException {
+            throws AuthenticationException, java.text.ParseException {
         return this.acquireTokenByAuthorizationCode(authorizationCode,
                 redirectUri, credential, null, callback);
     }
@@ -601,7 +601,7 @@ public class AuthenticationContext {
             final String authorizationCode, final URI redirectUri,
             final AsymmetricKeyCredential credential, final String resource,
             final AuthenticationCallback callback)
-            throws AuthenticationException {
+            throws AuthenticationException, java.text.ParseException {
         this.validateAuthCodeRequestInput(authorizationCode, redirectUri,
                 credential, resource);
         return this.acquireTokenByAuthorizationCode(authorizationCode,
@@ -745,7 +745,7 @@ public class AuthenticationContext {
             final String refreshToken,
             final AsymmetricKeyCredential credential,
             final AuthenticationCallback callback)
-            throws AuthenticationException {
+            throws AuthenticationException, java.text.ParseException {
         return acquireTokenByRefreshToken(refreshToken, credential,
                 (String) null, callback);
     }
@@ -778,7 +778,7 @@ public class AuthenticationContext {
             final String refreshToken,
             final AsymmetricKeyCredential credential, final String resource,
             final AuthenticationCallback callback)
-            throws AuthenticationException {
+            throws AuthenticationException, java.text.ParseException {
 
         return acquireTokenByRefreshToken(
                 refreshToken,
