@@ -58,8 +58,9 @@ final class JwtHelper {
         JSONObject json = new JSONObject();
         json.put("aud", jwtAudience);
         json.put("iss", credential.getClientId());
-        json.put("nbf", System.currentTimeMillis() + AuthenticationConstants.AAD_JWT_TOKEN_LIFETIME_SECONDS * 1000);
+        json.put("nbf", System.currentTimeMillis());
         json.put("sub", credential.getClientId());
+        json.put("exp", System.currentTimeMillis() + AuthenticationConstants.AAD_JWT_TOKEN_LIFETIME_SECONDS * 1000);
         final JWTClaimsSet claimsSet = JWTClaimsSet.parse(json);
 //        claimsSet.setAudience(audience);
 //        claimsSet.setIssuer(credential.getClientId());
